@@ -1,0 +1,45 @@
+---
+title: Python Primer
+description: Introductory Python Concepts
+---
+
+Python is a dynamically-typed, interpreted, object-oriented programming (OOP) language. It's known for being powerful but syntactically similar to pseudocode.
+
+## Syntax
+
+Python's syntax is much lighter than other common object-oriented programming (OOP) languages. In Java, curly braces are used to create and separate blocks of code. In Python, however, whitespace/indentation is used to create blocks:
+
+```python tab="Python"
+for i in range(10):
+    print(i)
+```
+
+```java tab="Java"
+for (int i=0; i < 10; i++) {
+    System.out.println(i);
+}
+```
+
+This is both a blessing and a curse. This makes Python code quicker to write and more concise, but inconsistent indentation will cause syntax errors. Be mindful of unintended blocks appearing in your code.
+
+<Callout type="warn">Be sure not to mix tabs and spaces as this will confuse the Python interpreter.</Callout>
+
+Also, notice that there are no semicolons required to differentiate lines!
+
+## Typing
+
+Python being "dynamically-typed" means that a variable's type is decided at runtime. That means we can create variables without explicitly telling Python what its type is:
+
+```python tab="Python"
+number = 10
+```
+
+```java tab="Java"
+int number = 10;
+```
+
+Python developers operate on the "duck typing" principle: 
+
+<Callout>If it walks like a duck and it quacks like a duck, then it must be a duck.</Callout>
+
+This means we care about an object having the functions and properties that we require, and not much about its class. As such, Python programs often don't involve type checking.
