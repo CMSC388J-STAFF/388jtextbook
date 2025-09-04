@@ -43,3 +43,77 @@ Python developers operate on the "duck typing" principle:
 <Callout>If it walks like a duck and it quacks like a duck, then it must be a duck.</Callout>
 
 This means we care about an object having the functions and properties that we require, and not much about its class. As such, Python programs often don't involve type checking.
+
+
+## Operators
+
+Boolean operators do not use symbols but rather their English names.
+
+```python tab="Python"
+a and b or c and not (d or e)
+```
+
+```java tab="Java"
+a && b || c && !(d || e)
+```
+
+Comparison operators (==, >=, etc.) are the same as in Java and C. 
+
+Interval comparisons can be used:
+
+```python tab="Python"
+if 1 <= number <= 5:
+```
+
+```java tab="Java"
+if (1<= number && number <= 5)
+```
+
+## Raising Exceptions 
+
+Since Python is dynamically-typed, we need more runtime error-checking. 
+
+For example, if you want a list of numbers that are between 0 and 10 passed in, you can check for this and raise an exception if needed
+<Callout> 
+Note: In this case, we don’t care what type of collection data is; 
+we just need to be able to iterate over it to check each value
+Use the raise keyword to raise an exception 
+</Callout>
+
+
+
+
+## Imports
+
+Import modules or packages with the import keyword
+``` 
+import <package_name> 
+```
+
+Assign your own name with the as keyword
+``` 
+import <package_name> as <new_name>
+```
+
+Import specific methods, classes, or packages
+```
+from <package_name> import <method/class>
+```
+
+Gets rid of dot notation: ```package_name.method()``` becomes ```method()```
+
+
+## Final Notes
+
+
+We tried to give an overview of the Python language, but we definitely didn’t cover all features available. 
+    * Please refer to the standard library docs: https://docs.python.org/3/library/index.html
+    * And to the language reference: https://docs.python.org/3/reference/index.html
+    * We’ll go over more interesting features in coming weeks (generators, context managers, file I/O, enums, RNGs, other tools…)
+
+
+
+
+
+
+
