@@ -64,25 +64,6 @@ Python developers operate on the "duck typing" principle:
 
 This means we care about an object having the functions and properties that we require, and not much about its class. As such, Python programs often don't involve type checking.
 
-
-## EAFP vs. LBYP
-
-Python coding style often follows **Easier to Ask Forgiveness than Permission (EAFP)** rather than **Look Before You Leap (LBYP)**.
-
-```python tab="LBYP"
-if "key" in dict_:
-    value += dict_["key"]
-```
-
-```python tab="EAFP (preferred)"
-try:
-    value += dict_["key"]
-except KeyError:
-    pass
-```
-
-Both EAFP and LBYP have their place, but duck typing is central to Python and many dynamic languages (Ruby, Perl, PHP).
-
 ## Operators
 
 Boolean operators do not use symbols but rather their English names.
@@ -106,20 +87,6 @@ if 1 <= number <= 5:
 ```java tab="Java"
 if (1<= number && number <= 5)
 ```
-
-## Raising Exceptions 
-
-Since Python is dynamically-typed, we need more runtime error-checking. 
-
-For example, if you want a list of numbers that are between 0 and 10 passed in, you can check for this and raise an exception if needed
-<Callout> 
-Note: In this case, we don’t care what type of collection data is; 
-we just need to be able to iterate over it to check each value
-Use the raise keyword to raise an exception 
-</Callout>
-
-
-
 
 ## Python Classes
 
@@ -266,21 +233,6 @@ else:
 A `for` loop can include an `else`, which runs if the loop exits normally (without `break`).
 
 
-## Sequences
-
-Iterating over lists:
-
-```python
-for num in [0, 1, 4, 5, 7, 2]:
-    print(num)
-```
-
-Lists don’t need to be homogeneous.  
-You can also iterate over strings, dicts, tuples, sets, and other iterables.
-
-<Callout>See Python docs for built-in sequences: https://docs.python.org/3.10/library/stdtypes.html</Callout>
-
-
 ## Dictionaries
 
 ```python
@@ -407,19 +359,6 @@ def print_stuff(x, y, z):
 print_stuff('a', z='b', y='c')  # prints a c b
 ```
 
-Variable arguments:
-
-```python
-def add(*numbers):
-    return sum(numbers)
-
-def print_info(**info):
-    print('Name:', info['name'])
-    print('Major:', info['major'])
-
-print_info(name='Pines', major='Engineering')
-```
-
 Default arguments:
 
 ```python
@@ -485,6 +424,15 @@ print(list(map(lambda x: x * 2, [1,2,3])))  # [2,4,6]
 
 ## Raising Exceptions
 
+Since Python is dynamically-typed, we need more runtime error-checking. 
+
+For example, if you want a list of numbers that are between 0 and 10 passed in, you can check for this and raise an exception if needed
+<Callout> 
+Note: In this case, we don’t care what type of collection data is; 
+we just need to be able to iterate over it to check each value
+Use the raise keyword to raise an exception 
+</Callout>
+
 ```python
 def process(data):
     if not all(map(lambda x: 0 <= x <= 10, data)):
@@ -494,6 +442,8 @@ def process(data):
 
 
 ## Handling Exceptions
+
+For our purposes, this isn't any different from Java:
 
 ```python
 data = [(1,2,3,4,5), {-1,2,30,4,-5}, range(20)]
@@ -509,14 +459,10 @@ for datum in data:
         print("End of try-except block")
 ```
 
-
-
-
-## Miscellaneous
+## Comments
 
 - Comments start with `#`.  
-- Python doesn’t support true multi-line comments, but you can use docstrings (`''' ... '''`).  
-- Print multiple values by separating them with commas.
+- Python supports multi-line comments with docstrings (`''' ... '''`).  
 
 ```python
 x = 1 # this is a comment
@@ -526,10 +472,7 @@ x = 1 # this is a comment
 line 1
 line 2
 '''
-
-print("Hello", "world")  # prints "Hello world"
 ```
-
 
 ## Final Notes
 
