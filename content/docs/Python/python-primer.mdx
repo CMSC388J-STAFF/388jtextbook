@@ -5,6 +5,26 @@ description: Introductory Python Concepts
 
 Python is a dynamically-typed, interpreted, object-oriented programming (OOP) language. It's known for being powerful but syntactically similar to pseudocode.
 
+
+## Beginning Concepts
+
+Python is whitespace delimited—use spaces or tabs, but not both.  
+Modern text editors can replace tabs with spaces. If you have an extra space at the start of any line in your code, it won’t run.
+
+```python tab="Python"
+for num in range(10):
+    print(num)
+```
+
+This prints numbers 0–9 in the console.  
+This code consists of:
+- A `for-in` loop
+- The `range()` and `print()` built-in functions
+- The integer `10`
+
+<Callout type="warn">Be careful mixing spaces and tabs—this will cause errors.</Callout>
+
+
 ## Syntax
 
 Python's syntax is much lighter than other common object-oriented programming (OOP) languages. In Java, curly braces are used to create and separate blocks of code. In Python, however, whitespace/indentation is used to create blocks:
@@ -45,6 +65,24 @@ Python developers operate on the "duck typing" principle:
 This means we care about an object having the functions and properties that we require, and not much about its class. As such, Python programs often don't involve type checking.
 
 
+## EAFP vs. LBYP
+
+Python coding style often follows **Easier to Ask Forgiveness than Permission (EAFP)** rather than **Look Before You Leap (LBYP)**.
+
+```python tab="LBYP"
+if "key" in dict_:
+    value += dict_["key"]
+```
+
+```python tab="EAFP (preferred)"
+try:
+    value += dict_["key"]
+except KeyError:
+    pass
+```
+
+Both EAFP and LBYP have their place, but duck typing is central to Python and many dynamic languages (Ruby, Perl, PHP).
+
 ## Operators
 
 Boolean operators do not use symbols but rather their English names.
@@ -83,6 +121,49 @@ Use the raise keyword to raise an exception
 
 
 
+## Python Classes
+
+```java tab="Java"
+public class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String greet() {
+        return "Hello, my name is " + name + " and I am " + age + " years old.";
+    }
+
+    public static void main(String[] args) {
+        Person p = new Person("Alice", 20);
+        System.out.println(p.greet());
+    }
+}
+```
+
+```python tab="Python"
+class Person:
+    # constructors always uses '__init__'
+    def __init__(self, name, age): 
+        self.name = name
+        self.age = age
+
+    # 
+    def greet(self): 
+        return f"Hello, my name is {self.name} and I am {self.age} years old."
+
+
+# Create an object
+p = Person("Alice", 20)
+print(p.greet())  # Output: Hello, my name is Alice and I am 20 years old.
+```
+
+
+
+
 ## Imports
 
 Import modules or packages with the import keyword
@@ -102,18 +183,358 @@ from <package_name> import <method/class>
 
 Gets rid of dot notation: ```package_name.method()``` becomes ```method()```
 
+Import modules:
+
+```python
+import math
+import math as m
+from math import sqrt
+```
+
+<Callout>Recall: a package requires an `__init__.py` file in its directory.</Callout>
+
+
+
+## Operators
+
+Boolean operators use words instead of symbols.
+
+```python
+a and b or c and not (d or e)
+```
+
+Comparison operators (`==`, `>=`, etc.) are the same as Java/C.  
+Interval comparisons are also allowed:
+
+```python
+if 1 <= number <= 5:
+```
+
+
+## Strings
+
+String formatting with `.format()`:
+
+```python
+'{} is a {}'.format('Blahaj', 'shark')  
+# 'Blahaj is a shark'
+
+'{animal} can fly. {animal} can also swim.'.format(animal='Ducks')
+# 'Ducks can fly. Ducks can also swim.'
+```
+
+Concatenation requires everything to be strings:
+
+```python
+', '.join(['x', 'y']) + ' abcd ' + str(999)  
+# 'x, y abcd 999'
+```
+
+
+## Loops
+
+The only valid for-loop format:
+
+```python
+for value in lst:
+    # do something
+```
+
+While-loops:
+
+```python
+while condition:
+    # do something
+```
+
+Do-while loops don’t exist in Python.
+
+
+## Control Keywords
+
+- `break`: exits a loop  
+- `continue`: skips to the next iteration  
+- `pass`: placeholder where code is required  
+
+```python
+if condition:
+    pass
+else:
+    print("some actual code")
+```
+
+A `for` loop can include an `else`, which runs if the loop exits normally (without `break`).
+
+
+## Sequences
+
+Iterating over lists:
+
+```python
+for num in [0, 1, 4, 5, 7, 2]:
+    print(num)
+```
+
+Lists don’t need to be homogeneous.  
+You can also iterate over strings, dicts, tuples, sets, and other iterables.
+
+<Callout>See Python docs for built-in sequences: https://docs.python.org/3.10/library/stdtypes.html</Callout>
+
+
+## Dictionaries
+
+```python
+birth_years = {'bach': 1685, 'da vinci': 1452, 'erdos': 1913}
+
+birth_years['jobs'] = 1955
+print(birth_years['da vinci'])
+
+for name in birth_years:
+    print(name)
+
+for name, year in birth_years.items():
+    print(name, year)
+
+print('erdos' in birth_years)          # True
+print('scholze' in birth_years)        # False
+print(1685 in birth_years.values())    # True
+print(1729 in birth_years.values())    # False
+```
+
+
+## Tuples
+
+```python
+record = ('Priya', 20, [1, 2, 3])
+print(record[0])
+
+record[0] = 'Amy'  # TypeError, tuples are immutable
+```
+
+Tuple unpacking:
+
+```python
+nums = ((1,2,3), (4,5,6), (7,8,9))
+for a, b, c in nums:
+    print(f'First: {a}, Second: {b}, Third: {c}')
+```
+
+Swapping variables:
+
+```python
+a, b = 8, 4
+a, b = b, a
+print(a, b)  # 4, 8
+```
+
+
+## Sets
+
+```python
+visited = {4, 2, 1, 3, 5}
+visited.add('cookie')
+visited.remove(2)
+
+print(1 in visited)
+print(6 not in visited)
+
+s1 = {1, 2, 3}
+s2 = {1, 2, 3, 4}
+
+print(s1 <= s2)   # subset check
+print(s1 | s2)   # union
+print(s1 & s2)   # intersection
+```
+
+
+## Slices
+
+Slices work with lists and strings.
+
+```python
+l = [1, 2, 3, 4, 5]
+print(l[1:])    # [2,3,4,5]
+print(l[:4])    # [1,2,3,4]
+print(l[1:4])   # [2,3,4]
+print(l[::-1])  # [5,4,3,2,1]
+
+s = "CMSC388J"
+print(s[:4])    # CMSC
+print(s[4:])    # 388J
+print(s[4:7])   # 388
+print(s[:3:-1]) # J883
+```
+
+
+## Functions
+
+Defining functions:
+
+```python
+def distance(p1, p2) -> float:
+    x_dist = (p1[0] - p2[0]) ** 2
+    y_dist = (p1[1] - p2[1]) ** 2
+    return (x_dist + y_dist) ** 0.5
+```
+
+Functions are objects:
+
+```python
+def apply(func):
+    data = [1, 2, 5, 6, 1, 3, 0, 5, 8, 9, 2]
+    return func(data)
+```
+
+Returning multiple values:
+
+```python
+def animals():
+    return 'duck', 'camel'
+
+a = animals()      # ('duck', 'camel')
+d, c = animals()   # d='duck', c='camel'
+```
+
+
+## Function Arguments
+
+Python supports positional and keyword arguments.
+
+```python
+def print_stuff(x, y, z):
+    print(x, y, z)
+
+print_stuff('a', z='b', y='c')  # prints a c b
+```
+
+Variable arguments:
+
+```python
+def add(*numbers):
+    return sum(numbers)
+
+def print_info(**info):
+    print('Name:', info['name'])
+    print('Major:', info['major'])
+
+print_info(name='Pines', major='Engineering')
+```
+
+Default arguments:
+
+```python
+def print_something(x=0):
+    print(x)
+
+print_something()   # 0
+print_something(1)  # 1
+```
+
+
+## Useful Built-in Functions
+
+```python
+s = "darth vader"
+print(type(s))
+print(dir(s))
+
+l = [True, True, True]
+print(len(l))  # 3
+```
+
+Conversions:
+
+```python
+print(str(123))  # "123"
+print(int("456"))  # 456
+```
+
+
+Map and filter:
+
+```python
+def square(x): return x ** 2
+print(list(map(square, range(5))))
+
+def long_string(s): return len(s) >= 8
+print(list(filter(long_string, ['fantastic', 'python', 'acrobatic'])))
+```
+
+Any/All:
+
+```python
+def is_prime(p): ...
+print(all(map(is_prime, range(100))))
+print(any([False, True, False]))
+```
+
+<Callout>See more: https://docs.python.org/3/library/functions.html</Callout>
+
+
+## Lambda Functions
+
+Lambdas are short anonymous functions:
+
+```python
+a = lambda x, y: x + y
+print(a(1, 2))  # 3
+
+print(list(map(lambda x: x * 2, [1,2,3])))  # [2,4,6]
+```
+
+
+## Raising Exceptions
+
+```python
+def process(data):
+    if not all(map(lambda x: 0 <= x <= 10, data)):
+        raise ValueError("All values must be between 0 and 10")
+    # other processing
+```
+
+
+## Handling Exceptions
+
+```python
+data = [(1,2,3,4,5), {-1,2,30,4,-5}, range(20)]
+
+for datum in data:
+    try:
+        process(datum)
+    except ValueError as e:
+        print(f"Invalid input {datum}: {str(e)}")
+    else:
+        print("Nothing went wrong")
+    finally:
+        print("End of try-except block")
+```
+
+
+
+
+## Miscellaneous
+
+- Comments start with `#`.  
+- Python doesn’t support true multi-line comments, but you can use docstrings (`''' ... '''`).  
+- Print multiple values by separating them with commas.
+
+```python
+x = 1 # this is a comment
+# this is another comment
+
+'''
+line 1
+line 2
+'''
+
+print("Hello", "world")  # prints "Hello world"
+```
+
 
 ## Final Notes
-
 
 We tried to give an overview of the Python language, but we definitely didn’t cover all features available. 
     * Please refer to the standard library docs: https://docs.python.org/3/library/index.html
     * And to the language reference: https://docs.python.org/3/reference/index.html
     * We’ll go over more interesting features in coming weeks (generators, context managers, file I/O, enums, RNGs, other tools…)
-
-
-
-
-
-
 
