@@ -1,6 +1,6 @@
 ---
 title: Intro to Flask
-description: Introduce Flask, decorators, routing, and templating.
+description: Writing our first Flask code!
 ---
 
 ## What is Flask?
@@ -14,18 +14,46 @@ Used by - Pinterest, Twilio, LinkedIn, Obama’s 2012 campaign, Mozilla
 update service, Netflix, Stack Overflow Python community, UK government,
 and more! Wherever you need to quickly create websites/APIs
 
-
-## Decorators
-
-
 ## Bare Minimum
-
-
 
 Want to add more pages?
 
-## Variable Routing
+## Routing
 
+### Adding More Pages
+
+Our website just has a singular "Hello World" now. We can create more pages using the same syntax and file:
+
+```python
+@app.route('/')
+@app.route('/index')
+def hello_world():
+    return 'Hello, World!'
+
+@app.route('/about')
+def about():
+    return 'Calling from CMSC388J<br>I\'m learning Flask!'
+```
+
+Here, we apply two decorators to `hello_world` to create two routes that both point to `hello_world`.
+
+### Variable Routing
+
+Useful web applications typically feature many users, posts, etc., far too many to write out manually. We can apply variable routing to handle this:
+
+```python
+@app.route('/')
+def info():
+    return 'Append "user/{username}" to the end of the url to go to <i>username</i>\'s page'
+
+@app.route('/u/<username>')
+def show_profile(username):
+    return f'This is {username}\'s user profile'
+```
+
+Now, we have a countably infinite amount of routes: `/u/lance`, `/u/aryan`, `/u/chuck`, etc.
+
+<Callout> The order of the variables in the decorator and function must match! Flask matches by position rather than by name.</Callout>
 
 ## Templating
 
