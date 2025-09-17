@@ -1,0 +1,74 @@
+---
+title: Forms
+description: Learning about forms!
+---
+
+
+
+
+
+## Creating Forms
+
+Why do we need forms? 
+
+
+
+Forms allow for two primary things: 
+* Users to enter data into our website
+* Process the user input into something meaningful/valuable
+
+<details>
+  <summary>What HTML tag is used to create a form on a web page?</summary>
+  <p> the \<form> tag </p>
+</details>
+
+
+
+Form handling is made easy through the Flask-WTF package, which integrates Flask and WTForms. 
+
+
+
+```python
+from flask import request
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        return process_form()
+    else:
+        return render_template(...)
+```
+
+
+## Cross-Site Forgery (CSRF) Attacks
+
+
+Not everyone is a good person (shocker). 
+
+
+
+## Validating Forms
+
+
+```python
+pip3 install Flask-WTF
+```
+
+
+An example: 
+
+
+
+```python
+from flask_wtf import FlaskForm
+from wtforms import StringField, IntegerField
+from wtforms.validators import InputRequired, NumberRange, Length
+
+class WelcomeForm(FlaskForm):
+    name = StringField('Name', validators=[InputRequired(), Length(min=4, max=30)])
+    location = StringField('Location', validators=[InputRequired(),
+    Length(min=3, max=50)])
+    age = IntegerField('Age', validators=[InputRequired(), NumberRange(min=1, max=140,
+    message='Must be between 1 and 140')])
+    submit = SubmitField('Submit')
+```
