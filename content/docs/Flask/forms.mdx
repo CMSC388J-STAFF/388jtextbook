@@ -9,24 +9,22 @@ description: Learning about forms!
 
 ## Creating Forms
 
-Why do we need forms? 
+What are all the things you have used forms for? 
 
+Why do we need forms? Forms allow for two primary things: 
+    * Users to enter data into our website
+    * Process the user input into something meaningful/valuable
 
-
-Forms allow for two primary things: 
-* Users to enter data into our website
-* Process the user input into something meaningful/valuable
 
 <details>
   <summary>What HTML tag is used to create a form on a web page?</summary>
-  <p> the \<form> tag </p>
+  <div style={{ marginLeft: "20px" }}>
+    <p>The <code>&lt;form&gt;</code> tag</p>
+  </div>
 </details>
 
 
-
 Form handling is made easy through the Flask-WTF package, which integrates Flask and WTForms. 
-
-
 
 ```python
 from flask import request
@@ -39,26 +37,135 @@ def index():
         return render_template(...)
 ```
 
+### Creating Your First Form
 
-## Cross-Site Forgery (CSRF) Attacks
+In a python file:
+
+```python
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        name = request.form['name']
+        return f'Hello, {name}!'
+    return render_template('form.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+In an .html file inside the directory `templates`, include: 
+
+```html
+<!doctype html>
+<html>
+  <body>
+    <form method="post">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name">
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>
+```
+
+
+## Cross-Site Request Forgery (CSRF) Attacks and Tokens
 
 
 Not everyone is a good person (shocker). 
 
+You are logged into your bank’s website in one browser tab. In another tab, you visit a site with a hidden form that tries to 
+transfer money from your account. How could this happen without your knowledge?
+
+When you logged in, the browser automatically includes a session cookie (information stored in your 
+browser's memory temporarily such as IP address). With every request to this site, your browser includes 
+the information in this session cookie (regardless of which website it is). This means a malicious site can 
+trick your browser into sending a request you didn't send, but the broswer wouldn't be able to tell the difference. 
+
+This type of attack is called a Cross-Site Request Forgery (CSRF) attack. Luckily, there is a solution. Websites can use CSRF tokens - 
+unique and unpredictable values included in each form. The server checks for this token before processing a request. If it's incorrect, 
+the request will not be processed.  The token is generated (securly ofc) by the server and not shared with external sites, 
+so an attacker from a different malicious site cannot know in advance. 
+- The token is random and long enough that guessing it would cost excessive time and computing power
+- The token is usually regenerated after each session, so even if it is eventually guessed, it wouldn't be for too long. 
+
+
+### Implementing CSRF Tokens
+Install Flask-WTF
+```python
+pip3 install Flask-WTF
+```
+
+Set a secret key (for requiring session management and CSRF token regeneration): 
+```python
+import os
+from flask import Flask, render_template, request
+app = Flask(__name__)
+app.config['SECRET_KEY'] = os.urandom(16)
+```
+
+Create form class:
+```python
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import InputRequired
+
+class SimpleForm(FlaskForm):
+    name = StringField('Name', validators=[InputRequired()])
+    submit = SubmitField('Submit')
+```
+
+Use the Form in Your View
+```python
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    form = SimpleForm()
+    if form.validate_on_submit():
+        # process form data
+        return 'Form submitted!'
+    return render_template('form.html', form=form)
+```
+
+Render the CSRF Token in Your Template:
+
+```html
+<form method="post">
+    {{ form.csrf_token }}
+    {{ form.name.label }} {{ form.name(size=40) }}<br>
+    {{ form.submit() }}
+</form>
+```
 
 
 ## Validating Forms
 
+Imagine you are a content creator with a website that allows users to signup for your newsletter. 
+One of your users readily signs up, but they entered "@hmail.com" instead of "@gmail.com". This is one of the many ways that unintentional 
+input of badly-formatted data can contribute to difficulty for the individual collecting the data. How can we prevent this from happening? 
+
+Using validation - the process of checking that data meets certain rules or requirements before it is accepted or processed 
+by your application. This can include:
+- required fields filled in
+- data in correct format (e.g. emails)
+- values are in appropriate ranges (e.g. age can't be negative)
+
+Where can we tell the website to validate input? 
+* Client-side: In the browser, using HTML or JavaScript, for quick feedback.
+* Server-side: On the backend, to ensure data is safe and correct before saving or using it (since client-side checks can be bypassed).
+
+Right now, we'll go through an example of server-side using Flask. Firstly, install the following: 
 
 ```python
 pip3 install Flask-WTF
 ```
 
-
 An example: 
 
-
-
+Main Python file: 
 ```python
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField
@@ -72,3 +179,55 @@ class WelcomeForm(FlaskForm):
     message='Must be between 1 and 140')])
     submit = SubmitField('Submit')
 ```
+
+Respective .html file in `/templates`:
+```html
+{% extends "base.html" %}
+{% block content %}
+<h1>Welcome to the website!</h1>
+<form action="/" method="post">
+{{ form.csrf_token }}
+{{ form.name.label }}: {{ form.name(size=40) }} <br>
+{{ form.location.label }} {{ form.location(size=60) }} <br>
+{{ form.age.label }} {{ form.age() }} <br>
+{{ form.submit() }}
+</form>
+{% endblock %}
+```
+
+
+## Recap 
+
+<details>
+  <summary>Why do we need forms? </summary>
+  <div style={{ marginLeft: "20px" }}>
+    <p>
+    Allowing users to enter data and processing the input into something meaningful. 
+    </p>
+  </div>
+</details>
+
+<details>
+  <summary>How do CSRFs happen and how can we prevent these?</summary>
+  <div style={{ marginLeft: "20px" }}>
+    <p>
+    Cross-Site Request Forgery attacks occur when a malicious website tricks a user's browser into submitting a 
+    request to another site where the user is already authenticated. The target site can't tell that the request 
+    wasn't made intentionally by the user because the browser automatically includes session cookies with each request. 
+
+    By using a CSRF token — a unique, random value generated for each session and included in every form - the server checks that the token matches what it expects. 
+    If the token is missing or incorrect, the request is rejected.In Flask, this is commonly handled using the Flask-WTF extension, which automatically adds and 
+    checks CSRF tokens. 
+    </p>
+  </div>
+</details>
+
+<details>
+  <summary>What's an example of a problem associated with invalid data input and how can validators help?</summary>
+  <div style={{ marginLeft: "20px" }}>
+    <p>
+    A user might enter an age as "-5" or leave a required field blank, which can lead to errors in intended functionality or even security issues.
+    Validators in Flask (using Flask-WTF and WTForms) help by automatically checking that form fields meet certain requirements before processing. 
+    </p>
+  </div>
+</details>
