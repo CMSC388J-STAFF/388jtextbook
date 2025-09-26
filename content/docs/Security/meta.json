@@ -1,4 +1,4 @@
 {
     "title": "Security",
-    "pages": ["csrf", "sql-injections", "xss"]
+    "pages": ["csrf", "injection-attacks"]
 }
