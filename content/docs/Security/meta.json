@@ -1,0 +1,4 @@
+{
+    "title": "Security",
+    "pages": ["csrf", "sql-injections", "xss"]
+}
