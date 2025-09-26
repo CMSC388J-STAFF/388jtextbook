@@ -1,0 +1,54 @@
+---
+title: MongoDB Primer
+description: TODO for Aryan
+---
+
+## Databases
+
+Method of storing structured information that is efficient and persistent. Managed by a database management system (DBMS) that supports the following operations (often called CRUD):
+
+- **Create**: adding new data
+- **Read**: retrieving data
+- **Update**: changing data
+- **Delete**: removing data
+
+### SQL Databases
+
+Often called Relational Databases. Data is stored in tables with rows and columns. Preferred for consistency, complex queries, and strong relationships.
+
+Example table (Users):
+
+| id | name   | email              |
+|----|--------|--------------------|
+| 1  | Lance  | lpu@umd.edu        |
+| 2  | Aryan  | bob@email.com      |
+| 3  | Justin | immortal@umd.edu   |
+
+### Document Databases
+
+Data is stored in JSON-like documents. Preferred for flexibility, evolution, irregular data, horizontal scaling. 
+
+Example document (User):
+
+```json
+{
+  "id": 1,
+  "name": "Alice",
+  "email": "alice@email.com",
+  "preferences": {
+    "theme": "dark",
+    "notifications": true
+  }
+}
+```
+
+### Other Database Types
+
+- **Key–Value Stores** – Data stored as `{key: value}` pairs, great for fast lookups and caching (e.g., Redis)
+- **Column-Family Stores** – Data organized by columns for large-scale analytics and time-series (e.g., BigQuery)
+- **Graph Databases** – Data modeled as nodes and edges, optimized for relationships (e.g., Neo4j)
+- **Vector Databases** – Store and search high-dimensional vectors for ML applications (e.g., Pinecone)
+
+<Cards>
+  <Card title="StackOverflow 2025 Developer Survey" href="https://survey.stackoverflow.co/2025/technology#1-databases" />
+</Cards>
