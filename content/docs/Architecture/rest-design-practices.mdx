@@ -3,6 +3,46 @@ title: REST API Design Practices
 description: I need to take a rest
 ---
 
+
+## HTTP / HTTPS
+
+HTTP is the core protocol allowing computers to exchange information between nodes in a network. 
+It is the thing that enables your computer to access a webpage. APIs use HTTP to carry requests and 
+responses like web browsers do when getting pages.
+
+"I get a page, post an update, delete a photo, put up information."
+
+GET requests fetch information from a website/server. “GET” asks a site to send you a specific resource 
+without changing anything. It includes - getting [a resource] + target machine [link]
+
+POST requests send updated info to a server. Posting [updated info usually in body of form data] + target machine [website link]
+“POST” lets you submit forms or upload new data by sending info in the request body.
+
+
+All REST APIs speak the same basic language, making them easier to use and swap. Resources have unique addresses (URIs), 
+and can be retrieved/manipulated using standard methods. REST enables each item or service in it to have a unique link—simple and direct to access or change.
+
+
+## What is REST and why might you need it?
+
+REST stands for “Representational State Transfer.”. Essentially, it lets clients reference 
+resources; each reply updates the client’s “state” based on new data. Accessing resources via 
+REST moves the client to new states. 
+
+REST is a design pattern, not a formal standard, which means it's a flexible guideline for designing
+web APIs, but not a strict technology or format.
+
+
+## Web Infrastructure
+
+Firewalls help with web security.
+Routers help with web scalability.
+Caches help with web efficiency. 
+
+
+
+
+
 ## Case Study: Parts Web Store
 
 Let’s see what REST looks like in a real system.
