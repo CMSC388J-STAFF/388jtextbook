@@ -1,4 +1,4 @@
 {
     "title": "MongoDB",
-    "pages": ["mongodb-primer"]
+    "pages": ["mongodb-primer", "flash-upload"]
 }
