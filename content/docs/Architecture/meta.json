@@ -1,4 +1,4 @@
 {
     "title": "Scalable Architecture",
-    "pages": ["rest-design-practices.mdx"]
+    "pages": ["large-scale-apps.mdx", "rest-design-practices.mdx"]
 }

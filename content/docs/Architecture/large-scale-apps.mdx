@@ -1,0 +1,56 @@
+---
+title: Large-Scale Web Applications
+description: How to not be Homeless 101
+---
+
+## Scalable Architecture
+
+For this course, we built applications with exactly one web server instance (Flask) that connects to a database provider (MongoDB). However, most applications in industry look closer to this: 
+
+![Scaled Web App Architecture.](/scaled-architecture.png)
+
+### What does "scaling" mean?
+
+> Scalability is the ability of a service to grow to handle many concurrent users (ideally an arbitrarily large number).
+
+There are two ways to scale an application, broadly:
+
+- **Vertical Scaling (Scaling Up)** - Upgrading your machine. CMSC132 and CMSC216.
+- **Horizontal Scaling (Scaling Out)** - Adding more machines.
+
+| Aspect | Vertical Scaling | Horizontal Scaling |
+|---------|----------------------|-------------------------|
+| Ease of Development | Easy - already supported by most software | Harder - requires communication |
+| Performance | Okay - modern servers can have ~96 cores | Fast - handles very large workloads |
+| Replacements | Bad - single point of failure | Good - redundant nodes |
+| Cost Efficiency | Bad - requires expensive hardware | Good - allows for cheap hardware |
+| Scalability Limit | Limited - eventually hits hardware ceiling | Virtually unlimited, with good design |
+
+Tl;dr: Horizontal scaling is better, but is more complicated.
+
+### Load Balancers
+
+Load balancers take internet requests and routes the request to one of your web servers. 
+
+Stateless servers are what make load balancing possible-see the slides on REST APIs.
+
+### Scalable Databases
+
+Data Sharding: spreading a database over horizontally scaled instances called "shards." Choose which database to store data in based on a hash function.
+
+Replication: placing more than one copy of the same data.
+
+Initial attempts: Facebook had one database instance per university, at one point.  
+
+### In-Memory Caching 
+
+Cache results of recent database queries within a key-value store.
+
+Most notable implementations are Memcache and Redis. Caching is also performed on the internet itself via HTTP headers, and additionally performed via Content Distribution Networks (CDNs).
+
+## Credits
+
+<Cards>
+  <Card title="Mendel Rosenblum's Lecture on Large-Scale Web Applications" href="https://web.stanford.edu/class/cs142/lectures/LargeScaleWebApps.pdf" />
+  <Card title="Steve Tarzia's Lecture on Types of Scaling" href="https://web.stanford.edu/class/cs142/lectures/LargeScaleWebApps.pdf" />
+</Cards>
