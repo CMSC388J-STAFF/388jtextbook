@@ -1,4 +1,0 @@
-{
-    "title": "Flask",
-    "pages": ["intro-to-flask", "forms", "user-management", "blueprints-factories"]
-}
