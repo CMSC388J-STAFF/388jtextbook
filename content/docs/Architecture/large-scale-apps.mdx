@@ -3,6 +3,48 @@ title: Large-Scale Web Applications
 description: How to not be Homeless 101
 ---
 
+## Introduction
+
+Large scale web applications are those specifically designed to handle high traffic, large amounts data, and significant user load. 
+
+Basic web application architecture: 
+
+![Web App Architecture Basic.](/basic-web-app-architecture.png)
+
+
+By switching to a bigger instance, it might work temporarily but you may quickly hit limits on how much that single big instance can handle. 
+
+![Scale-Out Architecture.](/scale-out-architecture.png)
+
+In contrast, scale-out’s modular nature not only allows more flexibility in adding or removing instances to fit the needs, but it also helps with avoiding “single points of failure”, so if one server goes down, it’s not a big deal. 
+
+The challenge comes with figuring out how to manage these multiple instances and distribute work to them. 
+
+This is where Load Balancing comes in - and it helps with distributing incoming requests across multiple web servers to prevent overload and improve reliability. A few specific methods include HTTP redirects, DNS round-robin, and hardware load-balancing switches. 
+
+A load balancing switch can direct traffic to servers based on load or session, ensuring that user connections stay consistent, and can scale transparently. 
+Stateless servers make load balancing easier by allowing any request to be served by any server without needing to track user sessions or state.
+
+nginx (Engine-X) is a popular, high-performance web server that efficiently manages thousands of connections, balances loads, handles failures, and mitigates DDoS attacks.
+
+Handling state and sessions in scale-out setups requires fast, shared storage (like memcache) since session data isn’t stored on individual servers.
+
+Scaling storage typically means sharding (splitting data across many database servers) and replicating data for redundancy, increasing complexity but enabling larger scale.
+
+Memcache is an in-memory caching system that dramatically speeds up data retrieval for web apps; it sits between the database and the web servers but requires careful consistency management.
+
+A scale-out web architecture combines load balancers, multiple stateless web and database servers, and distributed caching to provide speed, reliability, and resilience at massive scale.
+
+
+
+
+This is hard tho, especially in the past, where it’s striking a healthy balance between 
+* Not spending too much in the initial startup phases of the product
+* Not spending too little too late when the app goes viral
+
+
+
+
 ## Scalable Architecture
 
 For this course, we built applications with exactly one web server instance (Flask) that connects to a database provider (MongoDB). However, most applications in industry look closer to this: 
