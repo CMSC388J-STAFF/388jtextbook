@@ -30,7 +30,9 @@ Tl;dr: Horizontal scaling is better, but is more complicated.
 
 ### Load Balancers
 
-Load balancers take internet requests and routes the request to one of your web servers. 
+Load balancers take internet requests and routes the request to one of your web servers, ensuring no single server is overloaded. Most common strategies:
+- Round Robin: route each request to the next server in a circular order
+- Least Connections: route next request to the server with the fewest active connections
 
 Stateless servers are what make load balancing possible-see the slides on REST APIs.
 
@@ -44,13 +46,19 @@ Initial attempts: Facebook had one database instance per university, at one poin
 
 ### In-Memory Caching 
 
-Cache results of recent database queries within a key-value store.
+Cache results of recent database queries within a key-value store. Performed on the internet via multiple layers:
 
-Most notable implementations are Memcache and Redis. Caching is also performed on the internet itself via HTTP headers, and additionally performed via Content Distribution Networks (CDNs).
+- Client/Browser Cache - uses HTTP headers
+- CDN Cache – caches static content (images, JS, CSS) close to users
+- Application Cache – stores results of expensive database queries, e.g. Memcache and Redis
+- Database Cache – built into the database engines themselves
+
+Most notable implementations are Memcache and Redis.
 
 ## Credits
 
 <Cards>
   <Card title="Mendel Rosenblum's Lecture on Large-Scale Web Applications" href="https://web.stanford.edu/class/cs142/lectures/LargeScaleWebApps.pdf" />
   <Card title="Steve Tarzia's Lecture on Types of Scaling" href="https://web.stanford.edu/class/cs142/lectures/LargeScaleWebApps.pdf" />
+
 </Cards>
