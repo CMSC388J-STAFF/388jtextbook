@@ -3,48 +3,6 @@ title: Large-Scale Web Applications
 description: How to not be Homeless 101
 ---
 
-## Introduction
-
-Large scale web applications are those specifically designed to handle high traffic, large amounts data, and significant user load. 
-
-Basic web application architecture: 
-
-![Web App Architecture Basic.](/basic-web-app-architecture.png)
-
-
-By switching to a bigger instance, it might work temporarily but you may quickly hit limits on how much that single big instance can handle. 
-
-![Scale-Out Architecture.](/scale-out-architecture.png)
-
-In contrast, scale-out’s modular nature not only allows more flexibility in adding or removing instances to fit the needs, but it also helps with avoiding “single points of failure”, so if one server goes down, it’s not a big deal. 
-
-The challenge comes with figuring out how to manage these multiple instances and distribute work to them. 
-
-This is where Load Balancing comes in - and it helps with distributing incoming requests across multiple web servers to prevent overload and improve reliability. A few specific methods include HTTP redirects, DNS round-robin, and hardware load-balancing switches. 
-
-A load balancing switch can direct traffic to servers based on load or session, ensuring that user connections stay consistent, and can scale transparently. 
-Stateless servers make load balancing easier by allowing any request to be served by any server without needing to track user sessions or state.
-
-nginx (Engine-X) is a popular, high-performance web server that efficiently manages thousands of connections, balances loads, handles failures, and mitigates DDoS attacks.
-
-Handling state and sessions in scale-out setups requires fast, shared storage (like memcache) since session data isn’t stored on individual servers.
-
-Scaling storage typically means sharding (splitting data across many database servers) and replicating data for redundancy, increasing complexity but enabling larger scale.
-
-Memcache is an in-memory caching system that dramatically speeds up data retrieval for web apps; it sits between the database and the web servers but requires careful consistency management.
-
-A scale-out web architecture combines load balancers, multiple stateless web and database servers, and distributed caching to provide speed, reliability, and resilience at massive scale.
-
-
-
-
-This is hard tho, especially in the past, where it’s striking a healthy balance between 
-* Not spending too much in the initial startup phases of the product
-* Not spending too little too late when the app goes viral
-
-
-
-
 ## Scalable Architecture
 
 For this course, we built applications with exactly one web server instance (Flask) that connects to a database provider (MongoDB). However, most applications in industry look closer to this: 
@@ -76,6 +34,8 @@ Load balancers take internet requests and routes the request to one of your web 
 - Round Robin: route each request to the next server in a circular order
 - Least Connections: route next request to the server with the fewest active connections
 
+Load Balancers can be implemented on different kinds of network software, and even in hardware. The balancing algorithm will depend on how much information it is given by these implementations.
+
 Stateless servers are what make load balancing possible-see the slides on REST APIs.
 
 ### Scalable Databases
@@ -86,7 +46,7 @@ Replication: placing more than one copy of the same data.
 
 Initial attempts: Facebook had one database instance per university, at one point.  
 
-### In-Memory Caching 
+### Distributed Caching 
 
 Cache results of recent database queries within a key-value store. Performed on the internet via multiple layers:
 
@@ -95,7 +55,56 @@ Cache results of recent database queries within a key-value store. Performed on 
 - Application Cache – stores results of expensive database queries, e.g. Memcache and Redis
 - Database Cache – built into the database engines themselves
 
-Most notable implementations are Memcache and Redis.
+Most notable implementations are Memcache and Redis. Handling state and sessions in horizontally scaled setups requires fast and shared storage, such as with caching.
+
+## Cloud Computing
+
+Building the above is hard. In the past, it was the difference between a successful or failed startup, as products often became "viral" without the necessary hardware or expertise to scale. 
+
+Cloud Computing's motto is to:
+
+> Use servers housed and managed by someone else.
+
+### On-Premise vs. Cloud
+
+Here's how buying your own servers compares to using the cloud:
+
+| Aspect | On-Premise Deployment | Cloud Deployment |
+|---------|----------------------|------------------|
+| Cost | Upfront investment in machines | Pay-as-you-go for resources |
+| Scalability | Limited by purhcased machines | Scale as necessary |
+| Efficiency | Machines may not be fully-utilized | Providers buy in bulk, optimize utilization |
+| Entry Barriers | Staff expertise, machines | Low |
+
+Tl;dr: Buying your own servers is usually less efficient.
+
+### Abstractions
+
+Different abstractions allow you to specify how much you want the provider to handle for you.
+
+- Virtual Machines - Manage OS, runtime, scaling, security, etc.
+- Containers (e.g., Docker, Kubernetes) - Don’t manage OSes directly, just portable apps.
+- Managed Storage (Cloud Databases) - Don’t manage database infrastructure or scaling.
+- Serverless Computing - Don’t manage servers, instances, or load balancing.
+
+### More on Serverless
+
+This is the deployment approach we suggest for CMSC388J, through Vercel. 
+
+All that you provide is code, and a URL that triggers it. The cloud provider then handles machine allocation, scaling, databases, etc. As a result, this is the most constrained abstraction. Developers pay per request.
+
+### Content Distribution Network (CDN)
+
+Consider static parts of a Flask application, such as HTML, CSS, and images. It doesn't matter where you get it, it doesn't change often, but obtaining it improves performance greatly. 
+
+A CDN is a group of servers set-up by cloud providers to cache static content. They are designed to be geographically distant, with each CDN server only serving nearby users. 
+
+Requests for static content are first sent to CDN servers, and given to users if it is found. If not, the request is forwarded to our main (or "origin") servers and databases:
+
+![CDN Image](/cdn.png)
+(From the Cloudflare Blog)
+
+The benefits are that app content is served faster and backend load is reduced.
 
 ## Credits
 
