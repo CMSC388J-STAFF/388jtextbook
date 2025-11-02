@@ -1,4 +1,4 @@
 {
-    "title": "Security",
+    "title": "🔒 Security",
     "pages": ["csrf", "injection-attacks", "hashing"]
 }
