@@ -7,7 +7,7 @@ export default function HomePage() {
       <p className="text-fd-muted-foreground">
         Open{' '}
         <Link
-          href="/docs"
+          href="/docs/Architecture/large-scale-apps"
           className="text-fd-foreground font-semibold underline"
         >
           /docs
@@ -17,3 +17,4 @@ export default function HomePage() {
     </main>
   );
 }
+
