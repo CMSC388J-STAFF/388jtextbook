@@ -3,6 +3,28 @@ title: Proxies and Caching
 description: I don't have any jokes in my cache, give me a bit...
 ---
 
+## Intro to Proxies and Caching
+
+Problem: When retrieving a webpage, there is high load on application servers/databases due to repeated requests.
+
+Proxy server = intermediary router for requests;
+
+A proxy server routes requests to the appropriate server but does not directly answer them. Load balancers (a type of proxy) manage large clusters by distributing simple work across multiple application servers.
+
+Caching speeds up data access by storing frequently or recently accessed items in a small, fast storage, applicable in web browsers, memory, filesystems, and databases.
+
+Adding a front-end cache like Squid allows frequent requests (e.g. https://www.amazon.com) to be handled without accessing the main application, while uncommon requests (https://www.gutenberg.org/) are sent through to MediaWiki and the shared database.
+
+A cache checks for data first (a hit) and only fetches from the main store if necessary (a miss), evicting older, less-used items—often using the Least Recently Used (LRU) policy.
+
+Managed caches let clients access both fast and slow storage directly and implement caching logic (e.g., Redis), 
+
+![Managed Caches](/managed-cache.png)
+
+while transparent caches handle caching internally, making it invisible to clients (e.g., Squid, CDNs).
+
+![Transparent Caches](/transparent-cache.png)
+
 ## When can we cache?
 
 Short answer: Websites or pages with many reads and relatively few writes. 
