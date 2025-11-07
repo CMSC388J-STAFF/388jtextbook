@@ -14,10 +14,10 @@ export function baseOptions(): BaseLayoutProps {
       title: (
         <>
           <Image
-            src="/logo.webp"
+            src="/logo.svg"
             alt="My WebP image"
-            width={24}
-            height={24}
+            width={60}
+            height={60}
             className="rounded-full"
           />
           CMSC388J
