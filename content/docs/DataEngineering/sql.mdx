@@ -1,6 +1,108 @@
 ---
 title: Relational Databases
-description: You already know this
+description: This is unrelated but...
 ---
 
-## asd
+## Concurrency
+
+How can we handle simultaneous handling of multiple functions by the database? 
+
+Consider a simple bank database that would have to do this:
+
+![Bank Database](/concurrency.jpg)
+
+Banks have to handle accounts sending money to one another. Here, Alice is trying to send $10 to Bob. This is an example of a multi-part transaction:
+
+1. We need to add $10 to Bob's account.
+2. We need to subtract $10 to Alice's account.
+
+And we must do this at once, as otherwise, users may have an incorrect understanding of the bank's total cash.
+
+--- 
+
+### Transactions and ACID
+
+A **transaction** is a group of operations that should be treated as one operation.
+
+Transactions are said to have the following properties, commonly known as **ACID**:
+- **Atomicity** - "cannot be broken down into smaller pieces"
+- **Consistency** - "should not violate any database constraint"
+- **Isolation** - "if multiple users access a database, their transactions cannot interfere with one another"
+- **Durability** - "in case of any failure within the database, data changed by transactions remain"
+
+These guarantees are not as well kept by NoSQL databases, giving SQL an edge in critical use cases. ETL pipelines (come to Javid's lecture!) usually extract from NoSQL sources and load into SQL targets. 
+
+---
+
+### A Transaction in Flask
+
+With that in mind, let's implement a transaction in our favorite framework! 
+
+First, let's create a route that simply returns all IDs in our database, to find Alice and Bob:
+
+```python
+@app.route("/accounts")
+def accounts():
+    db = get_db()
+    rows = db.execute('SELECT id, name, balance FROM accounts;').fetchall()
+    return jsonify([dict(r) for r in rows])
+```
+
+This will return:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Alice",
+    "balance": 20
+  },
+  {
+    "id": 2,
+    "name": "Bob",
+    "balance": 30
+  }
+]
+```
+
+And now let's create a route that transfers an amount from person `1` to person `2`:
+
+```python
+@app.route("/transfer/<amount>", methods=["POST"])
+def transfer(amount):
+    db = get_db()
+
+    try:
+        db.execute("BEGIN")
+        db.execute('UPDATE accounts SET balance = balance + ? WHERE id = 2;', (amount,))
+        db.execute('UPDATE accounts SET balance = balance - ? WHERE id = 1;', (amount,))
+        db.commit()
+        return jsonify({"ok": True, "amount": amount}), 201
+    except Exception as e:
+        db.rollback()
+        return jsonify({"ok": False, "error": str(e)}), 400
+```
+
+You'll notice that a transaction starts with `BEGIN`, and is ran all at once until either one of two things happen:
+
+- The transaction is **commited** because it was successful. This keeps **atomicity**.
+- The transaction is **rolled back** because it was unsuccessful. The keeps **consistency** and **durability**.
+
+---
+
+### Race Conditions
+
+Roughly the same thing it meant in CMSC216: multiple threads or processes compete to change the same value. With bank databases, malicious attackers may want to exploit inconsistencies to rob the bank.
+
+Transactions are processed in **sequentially** to avoid this. This keeps **isolation**.
+
+Databases such as SQLite implement this with **locks**. A database table can be in a few states:
+
+- **Unlocked** - No user is accessing the table. 
+- **Shared Lock** - One or more transactions are reading the table, but none may write to it. 
+- **Exclusive Lock** - A transaction is writing to the table, and no others may read or write to it. 
+
+<Cards>
+  <Card title="CS50 Introduction to Databases with SQL - Relating" href="https://cs50.harvard.edu/sql/notes/1/" />
+  <Card title="CS50 Introduction to Databases with SQL - Optimizing" href="https://cs50.harvard.edu/sql/notes/5/" />
+</Cards>
