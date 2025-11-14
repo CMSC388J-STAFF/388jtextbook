@@ -3,6 +3,73 @@ title: Relational Databases
 description: This is unrelated but...
 ---
 
+## Keys
+
+Let’s say you're working as an intern at your local library and are in a situation where you have a table of books 
+and you want to give each book a unique way to identify it. 
+
+You might first think that title could work, but if two books have the same title or the titles change, 
+it can lead to confusion or errors about which book is which.
+
+The concept of keys tackles this by introducing a **primary key**—a unique, never-changing identifier for each record 
+(e.g an ISBN or an auto-incremented ID number). This field/column is guaranteed to be unique for every row. 
+
+Now lets say you wanted to keep track of the ratings for each book. Having a new column for each book including all the redundant
+information about the book just for a single rating can be a waste of data - so you have a separate table for ratings. 
+How would you know which book the rating is pertaining to? You'd reference the primary key in of the book in the separate 
+ratings table. In the ratings table, the column would be called the **foreign key**. It allows you to organize your data 
+so every item can be referenced precisely and related to other tables without mix-ups, ensuring data integrity and 
+enabling complex relationships between tables (like authors to books, ratings to books, etc.).
+
+![Book Ratings](/books_ratings.jpg)
+
+--> Having a field that is a unique identifier allows to you accurately identify/diffrentiate items in your data.
+
+## JOIN
+
+We've gone over how having separate tables can reduce redundancy. 
+
+Let’s say you have to keep your information about sea lions and their migration in separate tables 
+(one for sea lions, one for migrations), but you want to see each sea lion alongside their migration data.
+However, you cannot just view all the info in one go because the data is in different places, so you’d have to 
+manually coordinate and match the rows—which is prone to mistakes and inefficiency.
+
+The **JOIN** concept tackles this by allowing you to create a query that combines rows from multiple tables 
+based on common columns (usually a shared ID or key). With JOIN, you specify how to link the related tables in SQL.
+It allows you to see all the relevant connected information together (e.g., all sea lion details and their respective 
+migration data in one table), enabling richer analysis and answering complex questions easily.
+
+
+
+To join the tables:
+```sql
+SELECT *
+FROM "sea_lions"
+JOIN "migrations" ON "migrations"."id" = "sea_lions"."id";
+```
+
+--> Allows you to separate various information to avoid redundancy but also use information from separate places together. 
+
+## Grouping
+
+Let’s say you have a table of ratings for books, and you want to know the average rating per book. 
+You can't just calculate the average by looking at all ratings together—because you need to group 
+ratings by book to get meaningful results (otherwise you get only the overall average).
+
+The **GROUP BY** concept in SQL tackles this by allowing you to partition your data into groups based on shared values 
+in a column and then apply functions that aggregate (e.g. *AVG*, *COUNT*, *SUM*) to each group independently. 
+
+It allows you to get results like the average rating for each book, the number of ratings per book, and you can even filter 
+or sort these groups (with HAVING and ORDER BY), making your data summaries precise and valuable.
+
+```sql
+SELECT "book_id", AVG("rating") AS "average rating"
+FROM "ratings"
+GROUP BY "book_id";
+```
+
+--> Allows for applying aggregation functions on rows with same value in column.
+
 ## Concurrency
 
 How can we handle simultaneous handling of multiple functions by the database? 
