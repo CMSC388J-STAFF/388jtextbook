@@ -1,4 +1,4 @@
 {
     "title": "CMSC388j",
-    "pages": ["index", "html", "Python", "FlaskMongoDB", "Security", "Architecture", "DataEngineering"]
+    "pages": ["index", "html", "Python", "FlaskMongoDB", "Security", "Architecture", "DataEngineering", "deployment"]
 }
